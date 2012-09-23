@@ -73,4 +73,7 @@ function Invoke-MSTest
     }
 
 		Write-Host ""
+
+		Write-Output "##teamcity[importData type='mstest' path='$ResultTrx']"
+		
 }
