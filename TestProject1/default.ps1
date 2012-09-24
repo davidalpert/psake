@@ -9,7 +9,9 @@ task default -depends Clean, Build, Test
 task Clean {
 	$folders_to_clean = @(
 		".\TestProject1\bin",
-		".\TestProject1\obj"
+		".\TestProject1\obj",
+		".\TestProject2\bin",
+		".\TestProject2\obj"
 	) 
 
 	$folders_to_clean | foreach-object ($_) {
@@ -21,7 +23,7 @@ task Build {
 	$v4_net_version = (ls "$env:windir\Microsoft.NET\Framework\v4.0*").Name
 
 	Write-Host "Using $v4_net_version"
-	exec { &"C:\Windows\Microsoft.NET\Framework\$v4_net_version\MSBuild.exe" "$base_dir\TestProject1\TestProject1.csproj" }
+	exec { &"C:\Windows\Microsoft.NET\Framework\$v4_net_version\MSBuild.exe" "$base_dir\TestProject1.sln" }
 }
 
 task Test {
