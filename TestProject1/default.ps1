@@ -28,16 +28,14 @@ task Test {
 	$test_assemblies = (Get-ChildItem "." -recurse -filter "*.dll") |
 														? { $_.FullName -match "\\bin\\$configuration\\Test.*?\d\.dll" }
 								
-	$test_assemblies | foreach-object ($_) {
-		Invoke-MSTest $_.FullName
-	}
+	Invoke-MSTest $test_assemblies ".\test.trx"
 }
 
 function Invoke-MSTest
 {
   [CmdletBinding()]
     param(
-        [Parameter(Position=0,Mandatory=1)] [string]$TestDll = $null,
+        [Parameter(Position=0,Mandatory=1)] [System.IO.FileInfo[]]$TestDll = $null,
         [Parameter(Position=1,Mandatory=0)] [string]$ResultTrx = $null
         )
 				
@@ -45,7 +43,7 @@ function Invoke-MSTest
 			$ResultTrx = "$TestDll.trx"
 		}
 
-		$mstest = "C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\mstest.exe"
+		$mstest = "C:\'Program Files (x86)'\'Microsoft Visual Studio 10.0'\Common7\IDE\mstest.exe"
         
     Write-Host "Running Tests:"
 		Write-Host "- Located at:" $TestDll 
@@ -57,7 +55,20 @@ function Invoke-MSTest
         Remove-Item $ResultTrx
     }       
 
-    $result = & $mstest /testcontainer:$TestDll /resultsfile:$ResultTrx
+		$container_args = ""
+		$TestDll | foreach-object ($_) {
+			$path_to_test_assembly = $_.FullName
+			$container_args = "$container_args /testcontainer:'$path_to_test_assembly'"
+		}
+
+    $cmd = "$mstest $container_args /resultsfile:'$ResultTrx'"
+
+		write-host $cmd
+		& { $cmd }
+
+		write-host $cmd
+
+		return
 
 		Write-Host ""
     

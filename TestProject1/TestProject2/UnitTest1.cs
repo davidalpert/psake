@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace TestProject1
+namespace TestProject2
 {
     /// <summary>
     /// Summary description for UnitTest1
