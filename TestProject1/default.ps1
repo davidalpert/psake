@@ -60,26 +60,20 @@ function Invoke-MSTest
 		$command_args = @()
 		$TestDll | foreach-object ($_) {
 			$path_to_test_assembly = $_.FullName
-			$command_args += "/testcontainer:$path_to_test_assembly"
+			$command_args += "/testcontainer:`"$path_to_test_assembly`""
 		}
 
-		$command_args += "/resultsfile:$ResultTrx"
+		$command_args += "/resultsfile:`"$ResultTrx`""
 		$command_string = $command_args -join ' '
 
-		write-host ""
-		write-host $mstest $command_string
-		write-host ""
-		
-
 		&$mstest $command_args
-		#&$mstest /testcontainer:'d:\users\david\dev\psake.github\testproject1\testproject1\bin\debug\testproject1.dll' /resultsfile:$ResultTrx
 
-return
-		&$mstest $command_string
+		Write-Host ""
+		Write-Output "##teamcity[importData type='mstest' path='$ResultTrx']"
 
-		return
+		return 
 
-		#$result = &([scriptblock]::create($commandstring))
+		$result = (&$mstest $command_args)
 
 		Write-Host ""
     
@@ -96,6 +90,5 @@ return
 
 		Write-Host ""
 
-		Write-Output "##teamcity[importData type='mstest' path='$ResultTrx']"
 		
 }
