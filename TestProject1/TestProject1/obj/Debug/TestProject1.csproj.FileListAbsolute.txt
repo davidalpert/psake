@@ -1,5 +1,0 @@
-D:\users\david\dev\psake.github\TestProject1\TestProject1\bin\Debug\TestProject1.dll
-D:\users\david\dev\psake.github\TestProject1\TestProject1\bin\Debug\TestProject1.pdb
-D:\users\david\dev\psake.github\TestProject1\TestProject1\obj\Debug\ResolveAssemblyReference.cache
-D:\users\david\dev\psake.github\TestProject1\TestProject1\obj\Debug\TestProject1.dll
-D:\users\david\dev\psake.github\TestProject1\TestProject1\obj\Debug\TestProject1.pdb
