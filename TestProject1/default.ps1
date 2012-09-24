@@ -28,7 +28,7 @@ task Test {
 	$test_assemblies = (Get-ChildItem "." -recurse -filter "*.dll") |
 														? { $_.FullName -match "\\bin\\$configuration\\Test.*?\d\.dll" }
 								
-	Invoke-MSTest $test_assemblies ".\test.trx"
+	Invoke-MSTest $test_assemblies "test.trx"
 }
 
 function Invoke-MSTest
@@ -43,7 +43,7 @@ function Invoke-MSTest
 			$ResultTrx = "$TestDll.trx"
 		}
 
-		$mstest = "C:\'Program Files (x86)'\'Microsoft Visual Studio 10.0'\Common7\IDE\mstest.exe"
+		$mstest = "C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\mstest.exe"
         
     Write-Host "Running Tests:"
 		Write-Host "- Located at:" $TestDll 
@@ -55,20 +55,21 @@ function Invoke-MSTest
         Remove-Item $ResultTrx
     }       
 
-		$container_args = ""
+		$command_args = @()
 		$TestDll | foreach-object ($_) {
-			$path_to_test_assembly = $_.FullName
-			$container_args = "$container_args /testcontainer:'$path_to_test_assembly'"
+			$path_to_test_assembly = $_.Name
+			$command_args += "/testcontainer:$path_to_test_assembly"
 		}
 
-    $cmd = "$mstest $container_args /resultsfile:'$ResultTrx'"
+		$command_args += "/resultsfile:$ResultTrx"
+		$command_string = $command_args -join ' '
+		write-host $command_string
 
-		write-host $cmd
-		& { $cmd }
-
-		write-host $cmd
+		&$mstest ($command_args -join ' ')
 
 		return
+
+		#$result = &([scriptblock]::create($commandstring))
 
 		Write-Host ""
     
